@@ -1,0 +1,25 @@
+{
+  "name": "@memw/betterconsole",
+  "version": "1.5.2",
+  "description": "Adds info and colors to the console replacing the traditional methods",
+  "main": "index.cjs",
+  "type": "commonjs",
+  "exports": {
+    "node": {
+      "import": "./index.mjs",
+      "require": "./index.js"
+    },
+    "default": "./index.js"
+  },
+  "keywords": [
+    "betterConsole",
+    "console",
+    "better"
+  ],
+  "author": "memw",
+  "license": "ISC",
+  "dependencies": {
+    "colors": "^1.4.0",
+    "moment": "^2.29.3"
+  }
+}
