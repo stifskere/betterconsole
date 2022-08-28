@@ -17,7 +17,7 @@
     "better"
   ],
   "publishConfig": {
-    "registry": "https://npm.pkg.github.com"
+    "@stifskere:registry": "https://npm.pkg.github.com"
   },
   "author": "memw",
   "license": "ISC",
