@@ -1,6 +1,6 @@
 {
   "name": "@memw/betterconsole",
-  "version": "1.5.4",
+  "version": "1.5.7",
   "description": "Adds info and colors to the console replacing the traditional methods",
   "main": "index.cjs",
   "type": "commonjs",
@@ -18,6 +18,9 @@
   ],
   "author": "memw",
   "license": "ISC",
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  },
   "repository": "https://github.com/stifskere/betterconsole.git",
   "dependencies": {
     "colors": "^1.4.0",

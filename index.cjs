@@ -5,7 +5,10 @@ module.exports = () => {
     const util = require('util');
 
     function textModify (type, color, data) {
-        if(typeof data == "object") data = JSON.stringify(data, null, 2);
+        if(/^[[{]/g.test(data)){
+            data = JSON.stringify(data, null, 2);
+            data = data.substring(2, data.length -2);
+        }
         if(Array.isArray(data)) data = data.join('\n');
         let conversion = color(`[${moment().format('h:mm:ss')}] ${(type) ? `[${type}] `: ""}- `) + `${data.replaceAll('\n', `\n${color(`[${moment().format('h:mm:ss')}] ${(type) ? `[${type}] `: ""}- `)}`)}\n`;
         if(conversion.endsWith(`\n${color(`[${moment().format('h:mm:ss')}] ${(type) ? `[${type}] `: ""}- `)}`)){
@@ -20,7 +23,7 @@ module.exports = () => {
             textModify("log", green, data);
         },
         trace(...data){
-            data = data.join("\n");
+            if(Array.isArray(data)) data = data.join("\n");
             const stackArray = (new Error("traceback")).stack.split("\n");
             stackArray.shift();
             data += "\n" + stackArray.join("\n").replace(/\G {4}/g, "");
@@ -33,8 +36,8 @@ module.exports = () => {
             textModify("info", cyan, data);
         },
         error(...data){
-            data = data.join("\n");
-            data = (new Error(data)).stack;
+            if(Array.isArray(data)) data = data.join("\n");
+            data = (new Error(data.replace(/[(\n)]/g, "\nError: "))).stack;
             textModify("error", red, data);
         },
         warn(...data){
