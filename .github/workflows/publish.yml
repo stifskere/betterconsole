@@ -12,8 +12,12 @@ jobs:
     steps:
       - name: checkout
         uses: actions/checkout@v2.1.1
+        env:
+          ACTIONS_ALLOW_UNSECURE_COMMANDS: 'true'
       - name: node
         uses: actions/setup-node@v1.4.4
+        env:
+          ACTIONS_ALLOW_UNSECURE_COMMANDS: 'true'
         with:
           node-version: 16
           registry-url: https://registry.npmjs.org
@@ -21,4 +25,4 @@ jobs:
         run: npm publish --access public
         env:
           NODE_AUTH_TOKEN: ${{secrets.NPM_AUTH_TOKEN}}
-          ACTIONS_ALLOW_UNSECURE_COMMANDS: true
+          ACTIONS_ALLOW_UNSECURE_COMMANDS: 'true'
