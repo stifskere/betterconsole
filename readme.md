@@ -28,7 +28,7 @@ console.trace("hello");
 console.debug("hello");
 console.info("hello");
 console.warn("hello");
-console.error("hello");
+console.error(true, "hello"); //first bool defines if it's gonna show stack trace (optional) true by default
 ```
 
 If you want some custom log there is an alternative you might like
