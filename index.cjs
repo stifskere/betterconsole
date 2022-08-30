@@ -6,9 +6,12 @@ module.exports = () => {
 
     function textModify (type, color, data) {
         let str = "";
-        for (const nData of data) if (/^[[{]/g.test(nData) || Array.isArray(nData)) str += JSON.stringify(nData, null, Array.isArray(nData) ? null : 2) + '\n';
-        else str += nData + '\n';
-        str = str.substring(0, str.length-1);
+        if (Array.isArray(data)) {
+            for (const nData of data) if ((/^[[{]/g.test(nData) || Array.isArray(nData))) str += JSON.stringify(nData, null, Array.isArray(nData) ? null : 2) + '\n';
+            else str += nData + '\n';
+            str = str.substring(0, str.length-1);
+        }
+        else str = data;
         let conversion = color(`[${moment().format('h:mm:ss')}] ${(type) ? `[${type}] `: ""}- `) + `${str.replaceAll('\n', `\n${color(`[${moment().format('h:mm:ss')}] ${(type) ? `[${type}] `: ""}- `)}`)}\n`;
         if(conversion.endsWith(`\n${color(`[${moment().format('h:mm:ss')}] ${(type) ? `[${type}] `: ""}- `)}`)) conversion = conversion.substring(0, conversion.length - `\n${color(`[${moment().format('h:mm:ss')}] ${(type) ? `[${type}] `: ""}- `)}`.length);
         process.stdout.write(conversion);
