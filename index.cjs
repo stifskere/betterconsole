@@ -5,30 +5,26 @@ module.exports = () => {
     const util = require('util');
 
     function textModify (type, color, data) {
-        if(/^[[{]/g.test(data)){
-            data = JSON.stringify(data, null, 2);
-            data = data.substring(2, data.length -2);
-        }
-        if(Array.isArray(data)) data = data.join('\n');
-        let conversion = color(`[${moment().format('h:mm:ss')}] ${(type) ? `[${type}] `: ""}- `) + `${data.replaceAll('\n', `\n${color(`[${moment().format('h:mm:ss')}] ${(type) ? `[${type}] `: ""}- `)}`)}\n`;
-        if(conversion.endsWith(`\n${color(`[${moment().format('h:mm:ss')}] ${(type) ? `[${type}] `: ""}- `)}`)){
-            conversion = conversion.substring(0, conversion.length - `\n${color(`[${moment().format('h:mm:ss')}] ${(type) ? `[${type}] `: ""}- `)}`.length);
-        }
-        if(typeof data === "string") process.stdout.write(conversion);
-        else process.stdout.write(`${util.format(data)}\n`);
+        let str = "";
+        for (const nData of data) if (/^[[{]/g.test(nData) || Array.isArray(nData)) str += JSON.stringify(nData, null, Array.isArray(nData) ? null : 2) + '\n';
+        else str += nData + '\n';
+        str = str.substring(0, str.length-1);
+        let conversion = color(`[${moment().format('h:mm:ss')}] ${(type) ? `[${type}] `: ""}- `) + `${str.replaceAll('\n', `\n${color(`[${moment().format('h:mm:ss')}] ${(type) ? `[${type}] `: ""}- `)}`)}\n`;
+        if(conversion.endsWith(`\n${color(`[${moment().format('h:mm:ss')}] ${(type) ? `[${type}] `: ""}- `)}`)) conversion = conversion.substring(0, conversion.length - `\n${color(`[${moment().format('h:mm:ss')}] ${(type) ? `[${type}] `: ""}- `)}`.length);
+        process.stdout.write(conversion);
     }
 
     console = {
         /**
          * logs something in the console adding the log tag.
-         * @param {string} data - What it is going to print in the console.
+         * @param {any} data - What it is going to print in the console.
          **/
         log(...data){
             textModify("log", green, data);
         },
         /**
          * logs something in the console adding the trace tag.
-         * @param {string} data - What it is going to print in the console before the trace
+         * @param {any} data - What it is going to print in the console before the trace
          **/
         trace(...data){
             if(Array.isArray(data)) data = data.join("\n");
@@ -39,22 +35,22 @@ module.exports = () => {
         },
         /**
          * logs something in the console adding the debug tag, used for debugging your code and marking it as it.
-         * @param {string} data - What it is going to print in the console
+         * @param {any} data - What it is going to print in the console
          **/
         debug(...data){
             textModify("debug", white, data);
         },
         /**
          * logs something in the console adding the info tag.
-         * @param {string} data - What it is going to print in the console
+         * @param {any} data - What it is going to print in the console
          **/
         info(...data){
             textModify("info", cyan, data);
         },
         /**
          * logs something in the console adding the error tag, useful for logging custom errors.
-         * @param {boolean || string} showStack - Define if it is going to show the stack trace (optional)
-         * @param {string} data - What it is going to print in the console
+         * @param {boolean || any} showStack - Define if it is going to show the stack trace (optional)
+         * @param {any} data - What it is going to print in the console
          **/
         error(showStack, ...data){
             if(showStack !== false){
@@ -66,14 +62,14 @@ module.exports = () => {
         },
         /**
          * logs something in the console adding the warning tag.
-         * @param {string} data - What it is going to print in the console
+         * @param {any} data - What it is going to print in the console
          **/
         warn(...data){
             textModify("warn", yellow, data);
         },
         /**
          * logs something in the console without any custom tag this library can offer.
-         * @param {string} data - What it is going to print in the console
+         * @param {any} data - What it is going to print in the console
          **/
         normalLog(...data){
             process.stdout.write(util.format(data) + '\n');
@@ -81,7 +77,7 @@ module.exports = () => {
         /**
          * logs something in the console adding the info tag.
          * @param {Object} conf - Configuration with 2 params, text: the name tag, color: the color of the tag (read colors.js documentation)
-         * @param {string} data - What it is going to print in the console
+         * @param {any} data - What it is going to print in the console
          **/
         customLog(conf, ...data){
             if(typeof conf !== "object"){
