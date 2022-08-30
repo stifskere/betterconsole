@@ -1,6 +1,6 @@
 module.exports = () => {
-    const {green, magenta, white, cyan, red, yellow} = require('colors');
-    const colors = require('colors');
+    const {green, magenta, white, cyan, red, yellow} = require('chalk');
+    const colors = require('chalk');
     const moment = require('moment');
     const util = require('util');
 
