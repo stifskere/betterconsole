@@ -12,6 +12,11 @@ module.exports = () => {
             str = str.substring(0, str.length-1);
         }
         else str = data;
+        const copyColor = color;
+        if(Array.isArray(color)){
+            color = colors[copyColor[0]];
+            for(const col of copyColor) color = color[col];
+        }
         let conversion = color(`[${moment().format('h:mm:ss')}] ${(type) ? `[${type}] `: ""}- `) + `${str.replaceAll('\n', `\n${color(`[${moment().format('h:mm:ss')}] ${(type) ? `[${type}] `: ""}- `)}`)}\n`;
         if(conversion.endsWith(`\n${color(`[${moment().format('h:mm:ss')}] ${(type) ? `[${type}] `: ""}- `)}`)) conversion = conversion.substring(0, conversion.length - `\n${color(`[${moment().format('h:mm:ss')}] ${(type) ? `[${type}] `: ""}- `)}`.length);
         process.stdout.write(conversion);
@@ -89,8 +94,9 @@ module.exports = () => {
             }
             data = data.join("\n");
             try{
-                textModify(conf.text ? conf.text : null, colors[conf.color ? conf.color : "white"], data);
-            }catch{
+                textModify(conf.text ? conf.text : null, Array.isArray(conf.color) ? conf.color : colors[conf.color ?? "white"], data);
+            }catch(err){
+                console.normalLog(err);
                 process.stdout.write('[invalid config] - ' + util.format(data) + '\n');
             }
         }
