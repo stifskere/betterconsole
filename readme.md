@@ -33,6 +33,7 @@ console.error(true, "hello"); //first bool defines if it's gonna show stack trac
 
 If you want some custom log there is an alternative you might like
 ```js
+// color accepts an array and a string, you can add multiple colors, beware of bugs if you set the same field
 console.customLog({color: "cyan", text: "whatever"}, "your log");
 ```
 

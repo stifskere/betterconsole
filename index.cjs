@@ -80,7 +80,9 @@ module.exports = () => {
          * @param {any} data - What it is going to print in the console
          **/
         normalLog(...data){
-            process.stdout.write(util.format(data) + '\n');
+            for(const i of data){
+                process.stdout.write(util.format(i) + '\n');
+            }
         },
         /**
          * logs something in the console adding the info tag.
