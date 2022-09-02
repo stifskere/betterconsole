@@ -9,7 +9,7 @@ module.exports = () => {
         if (Array.isArray(data)) {
             for (const nData of data) {
                 if ((/^[[{]/g.test(nData) || Array.isArray(nData))) str += JSON.stringify(nData, (key, value) => typeof value === "number" && BigInt(value).toString().length > 19 ? BigInt(value).toString() : value, Array.isArray(nData) ? null : 2) + '\n';
-                else if(typeof nData === "number") str += (BigInt(nData) + '\n');
+                else if(typeof nData === "number" && BigInt(nData).toString().length > 19) str += (BigInt(nData) + '\n');
                 else str += nData + '\n';
             }
             str = str.substring(0, str.length-1);
@@ -23,6 +23,13 @@ module.exports = () => {
         let conversion = color(`[${moment().format('h:mm:ss')}] ${(type) ? `[${type}] `: ""}- `) + `${str.replaceAll('\n', `\n${color(`[${moment().format('h:mm:ss')}] ${(type) ? `[${type}] `: ""}- `)}`)}\n`;
         if(conversion.endsWith(`\n${color(`[${moment().format('h:mm:ss')}] ${(type) ? `[${type}] `: ""}- `)}`)) conversion = conversion.substring(0, conversion.length - `\n${color(`[${moment().format('h:mm:ss')}] ${(type) ? `[${type}] `: ""}- `)}`.length);
         process.stdout.write(conversion);
+    }
+
+    function generateStack(data, title){
+        data = (`${title}: ` + data).replace(/\n/gm, `\n${title}: `);
+        const stackArray = (new Error()).stack.split("\n");
+        for(let i = 0; i <= 2; i++) stackArray.shift();
+        return data + "\n" + stackArray.join("\n").replace(/\G {4}/g, "");
     }
 
     console = {
@@ -39,9 +46,7 @@ module.exports = () => {
          **/
         trace(...data){
             if(Array.isArray(data)) data = data.join("\n");
-            const stackArray = (new Error("traceback")).stack.split("\n");
-            stackArray.shift();
-            data += "\n" + stackArray.join("\n").replace(/\G {4}/g, "");
+            data = generateStack(data, "Traceback");
             textModify("trace", magenta, data);
         },
         /**
@@ -67,7 +72,7 @@ module.exports = () => {
             if(showStack !== false){
                 if(typeof showStack !== 'boolean') data.unshift(showStack);
                 if(Array.isArray(data)) data = data.join("\n");
-                data = (new Error(data.replace(/[(\n)]/g, "\nError: "))).stack;
+                data = generateStack(data, "Error")
             }
             textModify("error", red, data);
         },
