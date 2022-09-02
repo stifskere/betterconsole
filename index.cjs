@@ -7,8 +7,11 @@ module.exports = () => {
     function textModify (type, color, data) {
         let str = "";
         if (Array.isArray(data)) {
-            for (const nData of data) if ((/^[[{]/g.test(nData) || Array.isArray(nData))) str += JSON.stringify(nData, null, Array.isArray(nData) ? null : 2) + '\n';
-            else str += nData + '\n';
+            for (const nData of data) {
+                if ((/^[[{]/g.test(nData) || Array.isArray(nData))) str += JSON.stringify(nData, null, Array.isArray(nData) ? null : 2) + '\n';
+                else if(typeof nData === "number") str += (BigInt(nData) + '\n');
+                else str += nData + '\n';
+            }
             str = str.substring(0, str.length-1);
         }
         else str = data;
