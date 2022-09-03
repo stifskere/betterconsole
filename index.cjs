@@ -46,6 +46,7 @@ function generateStack(data, title){
  * @param {Object} options - Options for what it's going to print and log in to the console.
  **/
 module.exports = options => {
+    options ??= {logRoute: "", keepLogs: false, dateFormat: null};
     logR = options.logRoute;
     dateFormat = options.dateFormat ?? "h:mm:ss";
 
