@@ -19,6 +19,12 @@ require('@memw/betterconsole')(); // for cjs
 (await import('@memw/betterconsole')).load(); // for es22
 ```
 
+Arguments can also have 1 route string to output logs into files
+
+```js
+require('@memw/betterconsole')("./Logs/log.txt"); // for cjs
+(await import('@memw/betterconsole')).load("./Logs/log.txt"); // for es22
+```
 
 Then you can just use the normal console methods
 
