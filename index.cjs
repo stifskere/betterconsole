@@ -55,7 +55,10 @@ module.exports = (options) => {
     }
 
     for(const event of ["exit", "SIGINT", "SIGUSR1", "SIGUSR2", "uncaughtException", "SIGTERM"]){
-        process.on(event, (code) => writeLog(`---- [${moment().format(dateFormat)}] Exit triggered with code ${code}, event: ${event} ----\n`))
+        process.on(event, (code) => {
+            writeLog(`---- [${moment().format(dateFormat)}] Exit triggered with code ${code}, event: ${event} ----\n`);
+            process.exit(code);
+        })
     }
 
     console = {

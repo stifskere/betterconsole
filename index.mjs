@@ -1,2 +1,2 @@
 import {default as index} from "./index.cjs";
-export function load(logRoute) {index(logRoute);}
+export function load(options) {index(options);}
