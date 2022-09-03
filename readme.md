@@ -19,11 +19,12 @@ require('@memw/betterconsole')(); // for cjs
 (await import('@memw/betterconsole')).load(); // for es22
 ```
 
-Arguments can also have 1 route string to output logs into files
+There is a little of configuration when the method is run, in terms of logging.
+These are the default values, but you can modify them as you wish
 
 ```js
-require('@memw/betterconsole')("./Logs/log.txt"); // for cjs
-(await import('@memw/betterconsole')).load("./Logs/log.txt"); // for es22
+require('@memw/betterconsole')({logRoute: "", keepLogs: false, dateFormat: "h:mm:ss"}); // for cjs
+(await import('@memw/betterconsole')).load({logRoute: "", keepLogs: false, dateFormat: "h:mm:ss"}); // for es22
 ```
 
 Then you can just use the normal console methods
@@ -40,11 +41,11 @@ console.error(true, "hello"); //first bool defines if it's gonna show stack trac
 If you want some custom log there is an alternative you might like
 ```js
 // color accepts an array and a string, you can add multiple colors, beware of bugs if you set the same field
-console.customLog({color: "cyan", text: "whatever"}, "your log");
+console.customLog({color: "cyan", text: "whatever", stack: true}, "your log");
 ```
 
 
-The configuration is entirely optional, if you don't put text it will simply not show, and if you don't set a color it will simply be white.
+The configuration is entirely optional, if you don't put text it will simply not show, and if you don't set a color it will simply be white, stack is also optional, and it means if it will generate stack or not.
 
 There is also an alternative method if you don't want to use the package function for that exact log
 ```js
