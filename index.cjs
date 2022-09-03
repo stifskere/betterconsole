@@ -47,7 +47,7 @@ function generateStack(data, title){
  **/
 module.exports = options => {
     options ??= {logRoute: "", keepLogs: false, dateFormat: null};
-    logR = options.logRoute;
+    logR = options.logRoute ?? "";
     dateFormat = options.dateFormat ?? "h:mm:ss";
 
     if(logR){
