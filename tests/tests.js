@@ -1,4 +1,4 @@
-require('../index.cjs')({logRoute: "./Logs/log.log", keepLogs: false, dateFormat: "h:mm:ss"});
+require('../index.cjs')({logRoute: "", keepLogs: false, dateFormat: "h:mm:ss"});
 
 console.normalLog("custom log:")
 console.customLog({color: ["yellow", "bgWhite"], text: "Custom log", stack: true}, "Hello World!");

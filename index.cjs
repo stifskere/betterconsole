@@ -6,7 +6,7 @@ const fs = require('node:fs');
 
 let logR = null;
 let dateFormat = null;
-let exit = 0;
+let exit = 1;
 
 function textModify (type, color, data) {
     let str = "";
@@ -45,7 +45,7 @@ function generateStack(data, title){
  * log package startup and configuration.
  * @param {Object} options - Options for what it's going to print and log in to the console.
  **/
-module.exports = (options) => {
+module.exports = options => {
     logR = options.logRoute;
     dateFormat = options.dateFormat ?? "h:mm:ss";
 
@@ -57,8 +57,8 @@ module.exports = (options) => {
 
     for(const event of ["exit", "SIGINT", "SIGUSR1", "SIGUSR2", "uncaughtException", "SIGTERM"]){
         process.on(event, (code) => {
-            writeLog(`---- [${moment().format(dateFormat)}] Exit triggered with code ${code}, event: ${event} ----\n`);
-            if(++exit === 1) process.exit(code);
+            if(exit++ === 1) writeLog(`---- [${moment().format(dateFormat)}] Exit triggered with code ${code}, event: ${event} ----\n`);
+            process.exit(0);
         })
     }
 
