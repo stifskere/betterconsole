@@ -23,8 +23,8 @@ There is a little of configuration when the method is run, in terms of logging.
 These are the default values, but you can modify them as you wish
 
 ```js
-require('@memw/betterconsole')({logRoute: "", keepLogs: false, dateFormat: "h:mm:ss"}); // for cjs
-(await import('@memw/betterconsole')).load({logRoute: "", keepLogs: false, dateFormat: "h:mm:ss"}); // for es22
+require('@memw/betterconsole')({logRoute: "", keepLogs: false, dateFormat: "h:mm:ss", ignoreLimits: false}); // for cjs
+(await import('@memw/betterconsole')).load({logRoute: "", keepLogs: false, dateFormat: "h:mm:ss", ignoreLimits: false}); // for es22
 ```
 
 Then you can just use the normal console methods
