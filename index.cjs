@@ -43,7 +43,7 @@ function generateStack(data, title){
 
 /**
  * log package startup and configuration.
- * @param {Object} options - Options for what it's going to print and log in to the console.
+ * @param {{logRoute: string || null, keepLogs: boolean || null, dateFormat: string || null, ignoreLimits: boolean || null}} options - Options for what it's going to print and log in to the console.
  **/
 module.exports = options => {
     options ??= {logRoute: null, keepLogs: false, dateFormat: null, ignoreLimits: false};
@@ -55,13 +55,13 @@ module.exports = options => {
     if(logR){
         let lr = logR.split(/[\\/]/gmi);if (lr[0] === '.') lr.pop(); lr = lr.join("/");
         fs.mkdirSync(lr, {recursive: true});
-        if(options.keepLogs && fs.existsSync(logR)) fs.renameSync(logR, logR.substring(0, logR.lastIndexOf('.')) + "-" + new Date().toString().replace(/ /g, "").substring(0, 20) + logR.substring(logR.lastIndexOf('.')));
+        if(options.keepLogs && fs.existsSync(logR)) fs.renameSync(logR, logR.substring(0, logR.lastIndexOf('.')) + "-" + new Date().toString().replace(/[ :]/g, "").substring(0, 20) + logR.substring(logR.lastIndexOf('.')));
         fs.writeFileSync(logR, `---- [${moment().format(dateFormat)}] Run triggered ----\n`);
         const logFilesRead = fs.readdirSync(logR.substring(0, logR.lastIndexOf('/')));
         if(logFilesRead.length > 10 && !options.ignoreLimits){
             console.warn("Log limit of 10 files reached, deleting the oldest log file - if you want to ignore this warning set ignoreLimits param to true");
-            let fileStats = logFilesRead.map(file => {return {path: `./${lr}/${file}`, stat: fs.statSync(`./${lr}/${file}`)}});
-            fileStats = fileStats.sort((a, b) => a.stat.mtime - b.stat.mtime);
+            let fileStats = logFilesRead.map(file => {return fs.statSync(`./${lr}/${file}`).isFile() ? {path: `./${lr}/${file}`, stat: fs.statSync(`./${lr}/${file}`)} : null});
+            fileStats = fileStats.filter(file => file).sort((a, b) => a.stat.mtime - b.stat.mtime);
             fs.unlinkSync(fileStats[0].path);
         }
     }
@@ -138,7 +138,7 @@ function defineConsole(){
         },
         /**
          * logs something in the console adding the info tag.
-         * @param {Object} conf - Configuration with 3 params, text: the name tag, color: the color of the tag (read chalk documentation), stack: define if it will generate stack trace
+         * @param {{color: string || null, text: string || null, stack: boolean || null}} conf - Configuration with 3 params
          * @param {any} data - What it is going to print in the console
          **/
         customLog(conf, ...data){
