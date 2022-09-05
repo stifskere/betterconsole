@@ -1,4 +1,4 @@
-require('../index.cjs')();
+require('../index.cjs')({logRoute: "./Logs/logz.log", keepLogs: true, ignoreLimits: false});
 
 console.normalLog("custom log:")
 console.customLog({color: ["yellow", "bgWhite"], text: "Custom log", stack: true}, "Hello World!");
