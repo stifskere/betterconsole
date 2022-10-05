@@ -54,8 +54,8 @@ module.exports = options => {
 
     if(logR){
         let lr = logR.split(/[\\/]/gmi);if (lr[0] === '.') lr.pop(); lr = lr.join("/");
-        fs.mkdirSync(lr, {recursive: true});
-        if(options.keepLogs && fs.existsSync(logR)) fs.renameSync(logR, logR.substring(0, logR.lastIndexOf('.')) + "-" + new Date().toString().replace(/[ :]/g, "").substring(0, 20) + logR.substring(logR.lastIndexOf('.')));
+        if (!fs.existsSync(lr)) fs.mkdirSync(lr, {recursive: true});
+        if (options.keepLogs && fs.existsSync(logR)) fs.renameSync(logR, logR.substring(0, logR.lastIndexOf('.')) + "-" + new Date().toString().replace(/[ :]/g, "").substring(0, 20) + logR.substring(logR.lastIndexOf('.')));
         fs.writeFileSync(logR, `---- [${moment().format(dateFormat)}] Run triggered ----\n`);
         const logFilesRead = fs.readdirSync(logR.substring(0, logR.lastIndexOf('/')));
         if(logFilesRead.length > 10 && !options.ignoreLimits){
