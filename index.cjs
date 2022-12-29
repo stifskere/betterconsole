@@ -34,9 +34,7 @@ function generateStack(data, title) {
     const modifiedData =
         (typeof data === "number" ? BigInt(data) : data).toString();
     const stackArray = new Error().stack.split("\n");
-    stackArray.shift();
-    stackArray.shift();
-    stackArray.shift();
+    for (let i = 0; i < 3; i++) stackArray.shift();
     const stackTrace = stackArray.join("\n").replace(/\G {4}/g, "");
     return `${title}: ${modifiedData}\n${stackTrace}`;
 }
@@ -76,7 +74,7 @@ module.exports = options => {
          * @param {any} args - What it is going to print in the console
          * @override
          **/
-        error: (enableTrace, ...args) => textModify("error", "red", enableTrace === true ? generateStack(args, "Error") : args),
+        error: (enableTrace, ...args) => textModify("error", "red", (enableTrace === true ? generateStack(args, "Error") : [enableTrace, ...args].splice(0, args.length + 1).join("\n"))),
         /**
          * logs something in the console adding the warning tag.
          * @param {any} args - What it is going to print in the console

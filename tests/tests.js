@@ -19,7 +19,7 @@ console.normalLog("traced error");
 console.error(true, "Hello World!");
 
 console.normalLog("non traced error");
-console.error(false, "Hello World!");
+console.error("Hello World!");
 
 console.normalLog("warn");
 console.warn("Hello World!");
