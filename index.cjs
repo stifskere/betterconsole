@@ -5,7 +5,6 @@ const util = require("util");
 
 let logR;
 let dateFormat;
-let exit = 1;
 
 function textModify(type, color, data) {
     const modifiedData = [];
@@ -27,7 +26,7 @@ function textModify(type, color, data) {
 
 function writeLog(tTt) {
     if (logR)
-        fs.writeFileSync(logR, (fs.readFileSync(logR) + tTt).replace(/\033\[.*?m/gm, ''));
+        fs.writeFileSync(logR, (fs.readFileSync(logR) + tTt).replace(/\033\[.*?m/gm, ""));
 }
 
 function generateStack(data, title) {
@@ -39,11 +38,13 @@ function generateStack(data, title) {
     return `${title}: ${modifiedData}\n${stackTrace}`;
 }
 
-for (const event of ["exit", "SIGINT", "SIGUSR1", "SIGUSR2", "uncaughtException", "SIGTERM"]) {
+for (const event of ["exit", "SIGINT", "SIGUSR1", "SIGUSR2", "uncaughtException", "unhandledRejection", "SIGTERM"]) {
     process.on(event, (code) => {
-        if (exit++ === 1)
+        if (event === "uncaughtException" || event === "unhandledRejection") console.error(true, code);
+        if ((event !== "unhandledRejection") || (event === "unhandledRejection" && process.listeners("unhandledRejection").length === 1)) {
             writeLog(`---- [${moment().format(dateFormat)}] Exit triggered with code ${code}, event: ${event} ----\n`);
-        process.exit(0);
+            process.exit(0);
+        }
     });
 }
 
@@ -108,7 +109,7 @@ module.exports = options => {
                 textModify(conf.text ? conf.text : null, Array.isArray(conf.color) ? conf.color : colors[conf.color ?? "white"], conf.stack ? generateStack(args, conf.text) : args);
             } catch (err) {
                 console.normalLog(err);
-                process.stdout.write('[invalid config] - ' + util.format(args) + '\n');
+                process.stdout.write(`[invalid config] - ${util.format(args)}\n`);
             }
         },
         /**
@@ -125,7 +126,7 @@ module.exports = options => {
 
     if (logR) {
         let lr = logR.split(/[\\/]/gmi);
-        if (lr[0] === '.') lr.pop();
+        lr.pop();
         lr = lr.join("/");
         if (!fs.existsSync(lr)) fs.mkdirSync(lr, {recursive: true});
         if (options.keepLogs && fs.existsSync(logR)) fs.renameSync(logR, logR.substring(0, logR.lastIndexOf('.')) + "-" + new Date().toString().replace(/[ :]/g, "").substring(0, 20) + logR.substring(logR.lastIndexOf('.')));
