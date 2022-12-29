@@ -18,11 +18,10 @@ function textModify(type, color, data) {
      else
         modifiedData.push(data);
 
-
-    const colorFunc = Array.isArray(color) ? chalk[color[0]] : chalk[color];
-    const date = moment().format(dateFormat);
-    const conversion = `${colorFunc(`[${date}] ${type ? `[${type}] ` : ""}- `)}${modifiedData.join("\n")}`;
-    process.stdout.write(conversion + '\n');
+    let format = `[${moment().format(dateFormat)}] ${type ? `[${type}] ` : ""}- `;
+    Array.isArray(color) ? color.map(c => format = chalk[c](format)) : format = chalk[color](format);
+    const conversion = `${format}${modifiedData.join("\n").replace(/\n/gm, `\n${format}`)}\n`;
+    process.stdout.write(conversion);
     writeLog(conversion);
 }
 

@@ -1,6 +1,6 @@
 {
   "name": "@memw/betterconsole",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "Adds info and colors to the console replacing the traditional methods",
   "main": "index.cjs",
   "type": "commonjs",
