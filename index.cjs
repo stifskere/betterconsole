@@ -70,7 +70,7 @@ module.exports = (options) => {
                 console.normalLog(err);
                 process.stdout.write('[invalid config] - ' + util.format(data) + '\n');
             },
-    normalLog: (...args) => {
+    normalLog: (...data) => {
             for(const i of data){
                 process.stdout.write(util.format(i) + '\n');
                 writeLog(`${i}\n`);
